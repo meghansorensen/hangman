@@ -3,7 +3,43 @@
 #include <string.h>
 #include <stdbool.h>
 
-int main()
+// Hangman Game
+// This game will allow the user 10 tries to guess the answer.
+// January 10, 2022
+// Meghan Sorensen
+
+bool checkForWinner(char progressAnswer[], char answer[])
+{
+    // Check for winner
+    if (strcmp(progressAnswer, answer) == 0)
+    {
+        printf("\n\nCongrats! You have solved the hangman!\n");
+        printf("Winning word is: %s\n", answer);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void printProgress(char progressAnswer[])
+{
+    for (int j = 0; j < strlen(progressAnswer); j++)
+    {
+        if (j == strlen(progressAnswer) - 1)
+        {
+            printf("%c", progressAnswer[j]);
+        }
+        else
+        {
+            printf("%c,", progressAnswer[j]);
+        }
+    }
+    printf("\n");
+}
+
+void playGame()
 {
     // Set the string answer
     char answer[] = "paul";
@@ -31,32 +67,28 @@ int main()
         {
             printf("Great guess, that was in there! \nThe updated word is:\n");
             // _,_,_,e,r
-            for (int j = 0; j < strlen(progressAnswer); j++)
-            {
-                printf("%c,", progressAnswer[j]);
-            }
-            printf("\n");
+            printProgress(progressAnswer);
         }
         else
         {
             printf("Nice try, but it isn't in there. Try again\n");
             guesses--;
             // _,_,_,e,r
-            for (int j = 0; j < strlen(progressAnswer); j++)
-            {
-                printf("%c,", progressAnswer[j]);
-            }
-            printf("\n");
+            printProgress(progressAnswer);
             // Also print out the number of guesses they have left
             printf("Also, you only have %d guesses left\n", guesses);
         }
-        // Check for winner
-        if (strcmp(progressAnswer, answer) == 0)
+        bool winner = checkForWinner(progressAnswer, answer);
+        if (winner)
         {
-            printf("\n\nCongrats! You have solved the hangman!\n");
-            printf("Winning word is: %s\n", answer);
-            return 0;
+            return;
         }
     }
     printf("\n\nYou LOSE!\n\n");
+    return;
+}
+
+int main()
+{
+    playGame();
 }
