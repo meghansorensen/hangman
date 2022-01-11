@@ -2,11 +2,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <time.h>
 
 // Hangman Game
 // This game will allow the user 10 tries to guess the answer.
 // January 10, 2022
 // Meghan Sorensen
+
+int getRandomNumber()
+{
+    time_t t;
+    //Go off of time to make sure you get a different random number
+    srand((unsigned)time(&t));
+    // Gets a random number between 0 and 19
+    return rand() % 19;
+}
 
 bool checkForWinner(char progressAnswer[], char answer[])
 {
@@ -23,11 +33,11 @@ bool checkForWinner(char progressAnswer[], char answer[])
     }
 }
 
-void printProgress(char progressAnswer[])
+void printProgress(char progressAnswer[], int sizeOfAnswer)
 {
-    for (int j = 0; j < strlen(progressAnswer); j++)
+    for (int j = 0; j < sizeOfAnswer; j++)
     {
-        if (j == strlen(progressAnswer) - 1)
+        if (j == sizeOfAnswer - 1)
         {
             printf("%c", progressAnswer[j]);
         }
@@ -39,11 +49,11 @@ void printProgress(char progressAnswer[])
     printf("\n");
 }
 
-void playGame()
+void playGame(char randomWord[])
 {
     // Set the string answer
-    char answer[] = "paul";
-    char progressAnswer[] = "____";
+    char *answer = randomWord;
+    char progressAnswer[20] = {};
     bool found = false;
     int guesses = 10;
     // Prompt the user for a guess
@@ -67,14 +77,14 @@ void playGame()
         {
             printf("Great guess, that was in there! \nThe updated word is:\n");
             // _,_,_,e,r
-            printProgress(progressAnswer);
+            printProgress(progressAnswer, strlen(answer));
         }
         else
         {
             printf("Nice try, but it isn't in there. Try again\n");
             guesses--;
             // _,_,_,e,r
-            printProgress(progressAnswer);
+            printProgress(progressAnswer, strlen(answer));
             // Also print out the number of guesses they have left
             printf("Also, you only have %d guesses left\n", guesses);
         }
@@ -90,5 +100,10 @@ void playGame()
 
 int main()
 {
-    playGame();
+    char *randomWords[] = {"black", "gray", "yellow", "white", "purple", "blue", "orange", "pink", "red", "gold", "silver", "green", "maroon", "aqua", "beige", "almond", "eggshell", "mauve", "violet", "brown"};
+    int randomNumber = getRandomNumber();
+    printf("Random Number: %d", randomNumber);
+    char *randomWord = randomWords[randomNumber];
+    printf("Random Word: %s", randomWord);
+    playGame(randomWord);
 }
